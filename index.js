@@ -1,34 +1,31 @@
-// تشغيل البوت الأول
-client1.once("ready", async () => {
-  console.log(`✅ Bot 1: ${client1.user.tag}`);
+require("dotenv").config();
 
-  const guild = await client1.guilds.fetch("1516709826695004182");
-  const channel = await guild.channels.fetch("1518871777839943710");
+const { Client, GatewayIntentBits } = require("discord.js");
+const { joinVoiceChannel } = require("@discordjs/voice");
 
-  joinVoiceChannel({
-    channelId: channel.id,
-    guildId: guild.id,
-    adapterCreator: guild.voiceAdapterCreator,
-    selfDeaf: true,
-    selfMute: false,
-  });
+const client = new Client({
+  intents: [GatewayIntentBits.Guilds],
 });
 
-// تشغيل البوت الثاني
-client2.once("ready", async () => {
-  console.log(`✅ Bot 2: ${client2.user.tag}`);
+client.once("ready", async () => {
+  console.log(`✅ Logged in as ${client.user.tag}`);
 
-  const guild = await client2.guilds.fetch("1516709826695004182");
-  const channel = await guild.channels.fetch("1518871857783111820");
+  try {
+    const guild = await client.guilds.fetch("1516709826695004182");
+    const channel = await guild.channels.fetch("1518871777839943710");
 
-  joinVoiceChannel({
-    channelId: channel.id,
-    guildId: guild.id,
-    adapterCreator: guild.voiceAdapterCreator,
-    selfDeaf: true,
-    selfMute: false,
-  });
+    joinVoiceChannel({
+      channelId: channel.id,
+      guildId: guild.id,
+      adapterCreator: guild.voiceAdapterCreator,
+      selfDeaf: true,
+      selfMute: false,
+    });
+
+    console.log("🎧 Joined voice channel!");
+  } catch (err) {
+    console.error(err);
+  }
 });
 
-client1.login(process.env.TOKEN);
-client2.login(process.env.TOKEN2);
+client.login(process.env.TOKEN);
